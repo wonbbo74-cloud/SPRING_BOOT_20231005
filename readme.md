@@ -1,51 +1,59 @@
-### **2주차: 개발 환경 설정 및 테스트**
+# 🌱 Spring Boot 블로그 · 게시판 · 포트폴리오
 
-- 스프링 부트 개발 환경을 구축하고, 기본적인 웹 페이지 실행을 통해 서버 동작 원리를 이해합니다.
-- **실습 내용**:
-    - **환경 구축**: VS Code, Java(JDK), 스프링 부트 확장 프로그램을 설치하고 JDK 경로를 설정했습니다.
-    - **프로젝트 생성**: Spring Initializr로 Maven 프로젝트를 생성하고 Thymeleaf, Lombok 등 초기 의존성을 추가했습니다.
-    - **페이지 실행 및 맵핑**: 간단한 `index.html`과 `hello.html`을 만들고, `DemoController`를 통해 특정 URL 요청(`@GetMapping`)이 오면 `Model` 객체로 데이터를 뷰(View)에 전달하여 화면에 출력하는 과정을 실습했습니다.
-    - **버전 관리**: 프로젝트를 Git과 연동하여 GitHub 원격 저장소에 소스 코드를 올리는 방법을 익혔습니다.
+Spring Boot로 만든 개인 포트폴리오 웹사이트입니다. 부트스트랩 포트폴리오 템플릿 위에 **블로그, 게시판, 회원 관리** 기능을 붙였고, 수업에서 주차별로 기능을 하나씩 추가하며 완성했습니다.
 
----
+## 주요 기능
 
-### **3주차: 포트폴리오 작성하기 (프론트엔드)**
+- **포트폴리오 메인**: 소개, 프로젝트, 팀, 상세 소개 페이지 (핑크 테마)
+- **블로그(Article)**: 글 작성·조회·수정·삭제(CRUD), 존재하지 않는 글 접근 시 에러 페이지
+- **게시판(Board)**: 페이징, 키워드 검색, 글 작성·조회·수정·삭제, 로그인한 사용자만 접근
+- **회원(Member)**: 회원가입, 이메일 중복 검사, BCrypt 비밀번호 암호화
+- **로그인·보안 (Spring Security)**
+  - 폼 로그인, remember-me, 로그인 성공/실패 핸들러
+  - 세션 만료 페이지, 세션 시간 제한
+  - CSRF 보호 (dev 프로필에서는 비활성화), XSS 보호 헤더
+- **메일 내용 업로드**: 문의 내용을 `.txt` 파일로 저장
 
-- 부트스트랩 템플릿을 프로젝트에 적용하여 개인 포트폴리오의 프론트엔드 화면을 구성합니다.
-- **실습 내용**:
-    - **템플릿 적용**: 부트스트랩5 기반의 무료 포트폴리오 템플릿을 다운로드하여 `static`과 `templates` 폴더에 CSS, JS, HTML 파일을 배치했습니다.
-    - **화면 수정**: 메인 페이지의 네비게이션 메뉴, 이름, 프로필 사진 등 주요 내용을 개인 정보에 맞게 수정했습니다.
-    - **페이지 추가 및 연결**: '상세 소개' 페이지(`about_detailed.html`)를 새로 만들고, 컨트롤러에 해당 페이지로 이동할 수 있는 URL 맵핑을 추가했습니다.
+## 사용 기술
 
----
+`Java 17` `Spring Boot 3.5` `Spring Data JPA` `Spring Security` `Thymeleaf` `MySQL` `Lombok` `Bootstrap 5` `Maven`
 
-### **4주차: 데이터베이스 연동 및 테스트**
+## 프로젝트 구조
 
-- MySQL 데이터베이스를 설치 및 연동하고, MVC 패턴에 따라 프로젝트 구조를 체계화합니다.
-- **실습 내용**:
-    - **DB 연동**: MySQL을 설치하고 'spring' 데이터베이스를 생성한 후, `application.properties`에 DB 연결 정보를 설정했습니다.
-    - **MVC 구조화**: 프로젝트를 `controller`, `model`(domain, repository, service 포함) 등 역할별 패키지로 나누어 구조를 정리했습니다.
-    - **연동 테스트**: **Entity(테이블)**, **Repository(DB 제어)**, **Service(로직)**, **Controller(요청 처리)**를 각각 구현하여, DB에서 데이터를 조회하고 웹 페이지에 출력하는 전체 MVC 흐름을 실습했습니다.
+```text
+demo/src/main/java/com/example/demo/
+├── Controller/   # Blog, BlogRest, Member, File, Demo 컨트롤러
+├── config/       # SecurityConfig, UserDetails
+└── model/
+    ├── domain/      # Article, Board, Member 엔티티
+    ├── repository/  # JPA Repository
+    └── service/     # 비즈니스 로직, DTO
+demo/src/main/resources/
+├── templates/    # Thymeleaf 화면 (board_*, article_*, login, join_*)
+└── static/       # CSS, JS, 이미지
+```
 
----
+## 실행 방법
 
-### **5주차: 블로그 게시판 - 1 (조회 및 글쓰기)**
+1. MySQL에 `spring` 데이터베이스 생성
+2. DB 비밀번호를 환경변수 `DB_PASSWORD`로 설정 (`application.properties`에서 읽어옵니다)
+3. `demo` 폴더에서 실행
 
-- REST API 개념을 바탕으로 블로그의 핵심 기능인 게시글 조회(Read)와 작성(Create)을 구현합니다.
-- **실습 내용**:
-    - **게시글 조회(Read)**: 데이터베이스의 모든 게시글을 가져와 목록 페이지(`article_list.html`)에 Thymeleaf의 반복문(`th:each`)을 이용해 출력하는 기능을 구현했습니다.
-    - **게시글 작성(Create)**: 새 글을 입력받는 `form`을 만들고, `BlogRestController`를 통해 `POST` 요청을 받아 데이터베이스에 게시글을 저장하는 기능을 구현했습니다.
-    - **DTO 도입**: 계층 간 데이터 교환을 위해 `AddArticleRequest`라는 DTO(Data Transfer Object)를 만들어 사용했습니다.
+```bash
+./mvnw spring-boot:run
+```
 
----
+4. 브라우저에서 `http://localhost:8080` 접속
 
-### **6주차: 블로그 게시판 - 2 (수정 및 삭제)**
+> 로컬(http)에서 로그인 유지가 안 되면 `server.servlet.session.cookie.secure`를 `false`로 바꾸세요.
 
-- 블로그 게시판의 수정(Update) 및 삭제(Delete) 기능을 구현하여 CRUD를 완성하고, 간단한 예외 처리를 학습합니다.
-- **실습 내용**:
-    - **게시글 수정(Update)**:
-        - 수정 페이지로 이동하는 동적 링크와 기존 내용을 보여주는 수정 폼(`article_edit.html`)을 구현했습니다.
-        - `@PutMapping`을 사용해 수정 요청을 처리하고, `application.properties`에 `hiddenmethod` 필터를 활성화하여 폼에서 PUT 메서드를 사용하도록 설정했습니다.
-    - **게시글 삭제(Delete)**:
-        - `@DeleteMapping`을 사용하여 특정 게시글을 ID로 찾아 삭제하는 기능을 구현했습니다.
-    - **예외 처리**: 존재하지 않는 게시글 ID로 접근 시, 미리 만들어 둔 에러 페이지로 이동시키는 예외 처리 로직을 추가했습니다.
+## 주차별 진행 내용
+
+| 주차 | 내용 |
+|---|---|
+| 2주차 | 개발 환경 구축, 프로젝트 생성, 컨트롤러·뷰 연결, GitHub 연동 |
+| 3주차 | 부트스트랩 포트폴리오 템플릿 적용, 상세 소개 페이지 추가 |
+| 4주차 | MySQL 연동, MVC 패키지 구조화 |
+| 5주차 | 블로그 글 조회·작성, DTO 도입 |
+| 6주차 | 글 수정·삭제, 에러 페이지 처리 |
+| 이후 | 게시판 페이징·검색, 회원가입·로그인, Spring Security, 세션, 파일 업로드 |
