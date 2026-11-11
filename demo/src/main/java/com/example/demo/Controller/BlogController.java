@@ -72,7 +72,6 @@ public class BlogController {
                             HttpSession session) {
         Object userId = session.getAttribute("userId");
         Object email = session.getAttribute("email");
-        System.out.println("Session userId: " + userId);
         if (userId == null) {
             StringBuilder redirect = new StringBuilder("redirect:/member_login");
             if (page != 0 || (keyword != null && !keyword.isEmpty())) {

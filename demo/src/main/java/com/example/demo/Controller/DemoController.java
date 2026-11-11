@@ -47,9 +47,6 @@ public class DemoController {
         // Thymeleaf로 전달
         model.addAttribute("data4", test);
 
-        // 디버깅 로그
-        System.out.println("데이터 출력 디버그 : " + test);
-
         // templates/testdb.html 반환
         return "testdb";
     }
